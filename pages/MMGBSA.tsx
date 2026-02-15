@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -40,6 +39,8 @@ const MMGBSA: React.FC = () => {
     }
   }, [isRefining, progress]);
 
+  const showResultValues = !isRefining && progress === 100;
+
   return (
     <div className="space-y-8 h-full flex flex-col">
       <div className="flex justify-between items-center border-b border-slate-800 pb-8">
@@ -69,36 +70,67 @@ const MMGBSA: React.FC = () => {
               </div>
            </div>
 
-           <div className="text-center space-y-8 z-10">
+           <div className="text-center space-y-8 z-10 w-full">
               <h3 className="text-sm font-bold text-cyan-500 uppercase tracking-[0.3em]">Master Equation</h3>
               
-              <div className="flex items-center gap-4 text-3xl md:text-5xl font-mono font-bold text-white">
-                 <motion.span animate={isRefining ? { opacity: [1, 0.4, 1] } : {}}>ΔG<sub className="text-xs">bind</sub></motion.span>
+              <div className="flex flex-wrap items-center justify-center gap-4 text-3xl md:text-5xl font-mono font-bold text-white">
+                 <motion.span animate={isRefining ? { opacity: [1, 0.4, 1] } : {}}>
+                   ΔG<sub className="text-xs">bind</sub>
+                 </motion.span>
                  <span className="text-cyan-500">=</span>
-                 <motion.div className="flex flex-col items-center">
+                 
+                 <div className="flex flex-col items-center">
                     <span className="text-slate-400">ΔE<sub className="text-xs text-slate-600">MM</sub></span>
                     <AnimatePresence>
-                      {!isRefining && progress === 100 && <motion.span initial={{ y: -5, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="text-xs text-cyan-500 mt-2">{-70.9}</motion.span>}
+                      {showResultValues && (
+                        <motion.span 
+                          initial={{ y: -5, opacity: 0 }} 
+                          animate={{ y: 0, opacity: 1 }} 
+                          className="text-xs text-cyan-500 mt-2"
+                        >
+                          -70.9
+                        </motion.span>
+                      )}
                     </AnimatePresence>
-                 </motion.div>
+                 </div>
+
                  <span className="text-cyan-500">+</span>
-                 <motion.div className="flex flex-col items-center">
+
+                 <div className="flex flex-col items-center">
                     <span className="text-slate-400">ΔG<sub className="text-xs text-slate-600">solv</sub></span>
                     <AnimatePresence>
-                      {!isRefining && progress === 100 && <motion.span initial={{ y: -5, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="text-xs text-cyan-500 mt-2">{results.solv}</motion.span>}
+                      {showResultValues && (
+                        <motion.span 
+                          initial={{ y: -5, opacity: 0 }} 
+                          animate={{ y: 0, opacity: 1 }} 
+                          className="text-xs text-cyan-500 mt-2"
+                        >
+                          {results.solv}
+                        </motion.span>
+                      )}
                     </AnimatePresence>
-                 </motion.div>
+                 </div>
+
                  <span className="text-cyan-500">+</span>
-                 <motion.div className="flex flex-col items-center">
+
+                 <div className="flex flex-col items-center">
                     <span className="text-slate-400">ΔG<sub className="text-xs text-slate-600">SA</sub></span>
                     <AnimatePresence>
-                      {!isRefining && progress === 100 && <motion.span initial={{ y: -5, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="text-xs text-cyan-500 mt-2">{'-'}</span>}
+                      {showResultValues && (
+                        <motion.span 
+                          initial={{ y: -5, opacity: 0 }} 
+                          animate={{ y: 0, opacity: 1 }} 
+                          className="text-xs text-cyan-500 mt-2"
+                        >
+                          -
+                        </motion.span>
+                      )}
                     </AnimatePresence>
-                 </motion.div>
+                 </div>
               </div>
 
               {isRefining && (
-                <div className="w-full max-w-sm mx-auto space-y-2">
+                <div className="w-full max-w-sm mx-auto space-y-2 mt-8">
                    <div className="flex justify-between text-[10px] font-mono text-cyan-600">
                       <span>ITERATING SOLVATION SHELL...</span>
                       <span>{progress}%</span>
@@ -109,7 +141,7 @@ const MMGBSA: React.FC = () => {
                 </div>
               )}
 
-              {!isRefining && progress === 100 && (
+              {showResultValues && (
                 <motion.div 
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
@@ -147,7 +179,7 @@ const MMGBSA: React.FC = () => {
                          <motion.div 
                           className={`h-full ${comp.color}`}
                           initial={{ width: 0 }}
-                          animate={{ width: progress === 100 ? `${Math.abs((comp.val / comp.max) * 100)}%` : 0 }}
+                          animate={{ width: progress === 100 ? `${Math.abs((comp.val / (comp.max || 1)) * 100)}%` : 0 }}
                           transition={{ delay: i * 0.1, duration: 1 }}
                          />
                       </div>
@@ -157,7 +189,7 @@ const MMGBSA: React.FC = () => {
            </div>
 
            <AnimatePresence>
-              {progress === 100 && (
+              {showResultValues && (
                 <motion.div 
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
