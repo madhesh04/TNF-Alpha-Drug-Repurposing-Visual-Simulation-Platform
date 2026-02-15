@@ -1,0 +1,7 @@
+{
+  "name": "TNF-Alpha Drug Repurposing Visual Simulation Platform",
+  "description": "An interactive, educational platform demonstrating the in-silico drug repurposing workflow for TNF-alpha targeting using molecular docking, ADMET, and MD simulations.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
