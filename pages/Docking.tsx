@@ -1,11 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import MoleculeViewer from '../components/Visuals/MoleculeViewer';
 import { MOCK_MOLECULES } from '../constants';
-// Added Zap to imports
-import { Target, Activity, ChevronRight, Play, RefreshCw, Layers, Info, X, Cpu, Search, Zap } from 'lucide-react';
+import { Target, ChevronRight, Play, RefreshCw, Layers, Info, X, Search, Zap } from 'lucide-react';
 
 const DOCKING_INSIGHTS = {
   grid: {
@@ -35,7 +33,7 @@ const Docking: React.FC = () => {
   const [isDone, setIsDone] = useState(false);
   const [showInsight, setShowInsight] = useState<keyof typeof DOCKING_INSIGHTS | null>(null);
   
-  const drug = MOCK_MOLECULES[1]; // Use Infliximab-analog for better score
+  const drug = MOCK_MOLECULES[1]; 
 
   const startDocking = () => {
     setIsDocking(true);
@@ -58,7 +56,6 @@ const Docking: React.FC = () => {
             setTimeout(() => setShowInsight(null), 3000);
             return 100;
           }
-          // Dynamic scoring effect showing the "search"
           if (next % 5 === 0) {
             setDockingScore(parseFloat((Math.random() * -5 - 2).toFixed(1)));
           }
@@ -106,7 +103,6 @@ const Docking: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 flex-1 min-h-0">
-        {/* Visualization area */}
         <div className="lg:col-span-2 glass rounded-3xl relative overflow-hidden bg-slate-900/20 border-slate-800 shadow-inner">
           <div className="absolute inset-0 z-0">
                <MoleculeViewer 
@@ -116,7 +112,6 @@ const Docking: React.FC = () => {
               />
           </div>
 
-          {/* Docking Animation Overlay */}
           <AnimatePresence>
             {isDocking && (
               <motion.div 
@@ -125,7 +120,6 @@ const Docking: React.FC = () => {
                 exit={{ opacity: 0 }}
                 className="absolute inset-0 z-20 pointer-events-none"
               >
-                {/* Search Grid Visualization */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <motion.div 
                     initial={{ scale: 0, opacity: 0 }}
@@ -137,7 +131,6 @@ const Docking: React.FC = () => {
                   </motion.div>
                 </div>
 
-                {/* Sampling Particles (Ligand conformers) */}
                 {[...Array(8)].map((_, i) => (
                   <motion.div
                     key={i}
@@ -167,7 +160,6 @@ const Docking: React.FC = () => {
                   />
                 ))}
 
-                {/* Primary Guided Ligand Path */}
                 <motion.div
                   className="absolute left-1/2 top-1/2 z-30"
                   initial={{ x: -300, y: -200, opacity: 0, scale: 3 }}
@@ -184,7 +176,6 @@ const Docking: React.FC = () => {
                     <div className="w-6 h-6 bg-cyan-500 rounded-full shadow-[0_0_30px_#22d3ee] flex items-center justify-center">
                       <Zap size={14} className="text-white animate-pulse" />
                     </div>
-                    {/* Trailing path */}
                     <motion.div 
                       className="absolute top-1/2 left-1/2 h-1 bg-gradient-to-l from-cyan-500/50 to-transparent origin-left"
                       style={{ width: 100, rotate: 180, x: -100 }}
@@ -200,7 +191,6 @@ const Docking: React.FC = () => {
             )}
           </AnimatePresence>
 
-          {/* Hud Overlay */}
           <div className="absolute bottom-6 left-6 right-6 z-30">
              <div className="flex justify-between items-end mb-4">
                 <div className="space-y-4">
@@ -232,9 +222,7 @@ const Docking: React.FC = () => {
           </div>
         </div>
 
-        {/* Info Column */}
         <div className="space-y-6 relative">
-          {/* Interaction Residues */}
           <div className="glass p-6 rounded-3xl border-l-4 border-l-cyan-500 bg-cyan-950/5">
              <h4 className="text-white font-bold mb-4 flex items-center gap-2">
                 <Layers size={18} className="text-cyan-400" />
@@ -250,7 +238,6 @@ const Docking: React.FC = () => {
              </div>
           </div>
 
-          {/* Insights Popups for Docking */}
           <AnimatePresence>
             {showInsight && (
               <motion.div
@@ -318,7 +305,6 @@ const Docking: React.FC = () => {
   );
 };
 
-// Fixed local SVG components
 const Loader2 = ({ size, className }: { size: number, className?: string }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <path d="M21 12a9 9 0 1 1-6.219-8.56"/>

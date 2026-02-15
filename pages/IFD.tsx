@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import MoleculeViewer from '../components/Visuals/MoleculeViewer';
-import { Cpu, Zap, ArrowRight, Layers, Box, Check } from 'lucide-react';
+import { Cpu, ArrowRight, Layers, Box, Check } from 'lucide-react';
 
 const IFD: React.FC = () => {
   const [isSimulating, setIsSimulating] = useState(false);

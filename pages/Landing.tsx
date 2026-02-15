@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import MoleculeViewer from '../components/Visuals/MoleculeViewer';
-import { ChevronRight, ArrowRight, PlayCircle } from 'lucide-react';
+import { ArrowRight, PlayCircle } from 'lucide-react';
 
 const Landing: React.FC = () => {
   return (

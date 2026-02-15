@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Play, Activity, Thermometer, Waves, Box, Info, Zap, Loader2, ChevronRight, X } from 'lucide-react';
+import { Play, Activity, Info, Loader2, ChevronRight, X } from 'lucide-react';
 import MoleculeViewer from '../components/Visuals/MoleculeViewer';
 
 const INSIGHTS = {
@@ -24,7 +23,6 @@ const MDSimulation: React.FC = () => {
   const [showInsight, setShowInsight] = useState<string | null>(null);
   const intervalRef = useRef<any>(null);
 
-  // Function to generate pseudo-realistic RMSD data
   const generateDataPoint = useCallback((time: number) => {
     let rmsd;
     if (time < 30) {
@@ -35,7 +33,6 @@ const MDSimulation: React.FC = () => {
     return { time, rmsd: parseFloat(rmsd.toFixed(2)) };
   }, []);
 
-  // Effect to handle simulation progress
   useEffect(() => {
     if (isSimulating) {
       intervalRef.current = setInterval(() => {
@@ -56,7 +53,6 @@ const MDSimulation: React.FC = () => {
     };
   }, [isSimulating]);
 
-  // Effect to update chart data as progress increases
   useEffect(() => {
     if (progress > 0 && progress % 2 === 0) {
       setData(prev => {
@@ -102,7 +98,6 @@ const MDSimulation: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-0">
-        {/* Trajectory Viewer */}
         <div className="lg:col-span-7 glass rounded-3xl relative overflow-hidden bg-slate-900/40 border-slate-800 shadow-2xl">
           <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
             <div className="px-3 py-1 glass rounded-full text-[10px] font-bold text-cyan-400 border-cyan-500/30 flex items-center gap-2">
@@ -142,7 +137,6 @@ const MDSimulation: React.FC = () => {
           </div>
         </div>
 
-        {/* Analytics Column */}
         <div className="lg:col-span-5 flex flex-col gap-6">
           <div className="glass rounded-3xl p-6 bg-slate-900/40 border-slate-800 flex-1 flex flex-col">
             <h4 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">Simulation Analysis (Real-time)</h4>
@@ -224,7 +218,6 @@ const MDSimulation: React.FC = () => {
         </div>
       </div>
       
-      {/* Insight Portal */}
       <AnimatePresence>
         {showInsight && (
           <motion.div

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { WORKFLOW_STEPS, getIcon } from '../constants';
-import { ArrowRight, CheckCircle2, Zap, Activity, Box, Cpu, Fingerprint, Network, Terminal } from 'lucide-react';
+import { ArrowRight, Activity, Network, Terminal } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
   const completionPercentage = 0;

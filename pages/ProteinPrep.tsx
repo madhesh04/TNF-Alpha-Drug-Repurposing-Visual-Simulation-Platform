@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import MoleculeViewer from '../components/Visuals/MoleculeViewer';
@@ -76,7 +76,6 @@ const ProteinPrep: React.FC = () => {
     setShowInsight(key);
     setActiveLogIndex(0);
     
-    // Simulate high-precision computational tasks with multi-stage logging
     const duration = 4500;
     const logInterval = duration / (STEP_DETAILS[key].logs.length + 1);
 
@@ -88,7 +87,6 @@ const ProteinPrep: React.FC = () => {
       clearInterval(logTimer);
       setTasks(prev => ({ ...prev, [key]: true }));
       setLoading(null);
-      // Keep insight open briefly after completion
       setTimeout(() => setShowInsight(null), 3000);
     }, duration);
   };
@@ -104,7 +102,6 @@ const ProteinPrep: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full relative">
-      {/* 3D Visualization Area */}
       <div className="glass rounded-3xl relative overflow-hidden flex flex-col min-h-[500px] border-slate-800 shadow-2xl">
         <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
           <span className="px-3 py-1 glass rounded-full text-[10px] font-bold text-cyan-400 border-cyan-500/30">PDB: 2AZ5 (TNF-ALPHA)</span>
@@ -173,7 +170,6 @@ const ProteinPrep: React.FC = () => {
         </div>
       </div>
 
-      {/* Control Panel */}
       <div className="flex flex-col gap-6 relative">
         <div className="space-y-2">
           <h2 className="text-3xl font-bold text-white flex items-center gap-3">
@@ -183,7 +179,6 @@ const ProteinPrep: React.FC = () => {
           <p className="text-slate-400 text-sm">Convert raw crystal data into a physically valid 3D model.</p>
         </div>
 
-        {/* Step Cards */}
         <div className="grid gap-3">
           {[
             { id: 'removeWater', label: 'Desolvation', icon: Droplets, desc: 'Strip experimental solvent artifacts.' },
@@ -227,7 +222,6 @@ const ProteinPrep: React.FC = () => {
                   {isDone ? <Check size={18} className="text-emerald-400" /> : <Info size={14} className="text-slate-600 opacity-50" />}
                 </button>
 
-                {/* Technical Detail Popup */}
                 <AnimatePresence>
                   {showInsight === item.id && (
                     <motion.div
@@ -248,7 +242,6 @@ const ProteinPrep: React.FC = () => {
                       <h5 className="text-white font-bold text-sm mb-1">{STEP_DETAILS[item.id as keyof typeof STEP_DETAILS].title}</h5>
                       <div className="text-[10px] font-mono text-cyan-600 mb-4">{STEP_DETAILS[item.id as keyof typeof STEP_DETAILS].mechanism}</div>
                       
-                      {/* Live Execution Log */}
                       <div className="bg-black/60 rounded-xl p-4 border border-slate-800 mb-4 h-36 overflow-hidden flex flex-col">
                         <div className="text-[9px] text-slate-500 font-mono mb-2 uppercase tracking-tighter border-b border-slate-800 pb-1 flex justify-between">
                           <span>Execution Log</span>
@@ -302,7 +295,6 @@ const ProteinPrep: React.FC = () => {
           })}
         </div>
 
-        {/* Success Footer */}
         <AnimatePresence>
           {isAllDone && (
             <motion.div 

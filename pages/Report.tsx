@@ -1,6 +1,4 @@
-
 import React from 'react';
-import { motion } from 'framer-motion';
 import { MOCK_MOLECULES } from '../constants';
 import { FileText, Download, CheckCircle, Shield, Target, Activity, Zap, Check } from 'lucide-react';
 
@@ -84,7 +82,6 @@ const Report: React.FC = () => {
            <div className="glass p-6 rounded-3xl bg-slate-900/40 border border-slate-800 flex flex-col items-center">
               <div className="w-full aspect-square glass rounded-2xl mb-6 relative overflow-hidden flex items-center justify-center">
                  <div className="text-8xl font-bold text-slate-800/20 select-none">CHEM</div>
-                 {/* Visual Representation */}
                  <div className="absolute inset-0 flex items-center justify-center p-8">
                     <Zap size={64} className="text-cyan-400 opacity-40 animate-pulse" />
                  </div>
