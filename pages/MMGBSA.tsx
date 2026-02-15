@@ -3,6 +3,31 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Zap, Calculator, ArrowRight, ShieldCheck, Thermometer } from 'lucide-react';
 
+// Sub-component to flatten JSX and prevent parser errors
+const EquationTerm: React.FC<{ 
+  label: string; 
+  sub: string; 
+  value?: number | string; 
+  showValue: boolean; 
+}> = ({ label, sub, value, showValue }) => (
+  <div className="flex flex-col items-center">
+    <span className="text-slate-400">
+      {label}<sub className="text-xs text-slate-600">{sub}</sub>
+    </span>
+    <AnimatePresence>
+      {showValue && value !== undefined && (
+        <motion.span 
+          initial={{ y: -5, opacity: 0 }} 
+          animate={{ y: 0, opacity: 1 }} 
+          className="text-xs text-cyan-500 mt-2 font-mono"
+        >
+          {value}
+        </motion.span>
+      )}
+    </AnimatePresence>
+  </div>
+);
+
 const MMGBSA: React.FC = () => {
   const [isRefining, setIsRefining] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -56,7 +81,7 @@ const MMGBSA: React.FC = () => {
           disabled={isRefining}
           className="flex items-center gap-2 px-8 py-3 bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-800 text-white rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(8,145,178,0.3)]"
         >
-          {isRefining ? <Calculator className="animate-spin" /> : <Calculator size={20} />}
+          {isRefining ? <Calculator className="animate-spin" size={20} /> : <Calculator size={20} />}
           <span>{isRefining ? 'Solving Thermodynamics...' : 'Run Refinement'}</span>
         </button>
       </div>
@@ -64,8 +89,8 @@ const MMGBSA: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
         <div className="glass rounded-3xl p-10 flex flex-col justify-center items-center relative overflow-hidden bg-slate-900/40 border-cyan-500/10">
            {/* Animated Equation Background */}
-           <div className="absolute inset-0 opacity-5 pointer-events-none flex items-center justify-center">
-              <div className="text-6xl font-mono text-cyan-400 break-all leading-tight">
+           <div className="absolute inset-0 opacity-5 pointer-events-none flex items-center justify-center overflow-hidden">
+              <div className="text-6xl font-mono text-cyan-400 whitespace-nowrap leading-tight animate-pulse">
                 ΔGbind = ΔGsolv + ΔEMM + ΔGSA ΔGbind = ΔGsolv + ΔEMM + ΔGSA
               </div>
            </div>
@@ -79,54 +104,11 @@ const MMGBSA: React.FC = () => {
                  </motion.span>
                  <span className="text-cyan-500">=</span>
                  
-                 <div className="flex flex-col items-center">
-                    <span className="text-slate-400">ΔE<sub className="text-xs text-slate-600">MM</sub></span>
-                    <AnimatePresence>
-                      {showResultValues && (
-                        <motion.span 
-                          initial={{ y: -5, opacity: 0 }} 
-                          animate={{ y: 0, opacity: 1 }} 
-                          className="text-xs text-cyan-500 mt-2"
-                        >
-                          -70.9
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                 </div>
-
+                 <EquationTerm label="ΔE" sub="MM" value="-70.9" showValue={showResultValues} />
                  <span className="text-cyan-500">+</span>
-
-                 <div className="flex flex-col items-center">
-                    <span className="text-slate-400">ΔG<sub className="text-xs text-slate-600">solv</sub></span>
-                    <AnimatePresence>
-                      {showResultValues && (
-                        <motion.span 
-                          initial={{ y: -5, opacity: 0 }} 
-                          animate={{ y: 0, opacity: 1 }} 
-                          className="text-xs text-cyan-500 mt-2"
-                        >
-                          {results.solv}
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                 </div>
-
+                 <EquationTerm label="ΔG" sub="solv" value={results.solv} showValue={showResultValues} />
                  <span className="text-cyan-500">+</span>
-
-                 <div className="flex flex-col items-center">
-                    <span className="text-slate-400">ΔG<sub className="text-xs text-slate-600">SA</sub></span>
-                    <AnimatePresence>
-                      {showResultValues && (
-                        <motion.span 
-                          initial={{ y: -5, opacity: 0 }} 
-                          animate={{ y: 0, opacity: 1 }} 
-                          className="text-xs text-cyan-500 mt-2"
-                        >
-                          -
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                 </div>
+                 <EquationTerm label="ΔG" sub="SA" value="--" showValue={showResultValues} />
               </div>
 
               {isRefining && (
@@ -136,7 +118,11 @@ const MMGBSA: React.FC = () => {
                       <span>{progress}%</span>
                    </div>
                    <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
-                      <motion.div className="h-full bg-cyan-500 shadow-[0_0_10px_#22d3ee]" style={{ width: `${progress}%` }} />
+                      <motion.div 
+                        className="h-full bg-cyan-500 shadow-[0_0_10px_#22d3ee]" 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${progress}%` }} 
+                      />
                    </div>
                 </div>
               )}
@@ -149,7 +135,7 @@ const MMGBSA: React.FC = () => {
                 >
                    <div className="text-[10px] text-slate-500 font-bold uppercase mb-2">Final Binding Energy</div>
                    <div className="text-7xl font-mono font-bold text-emerald-400 shadow-[0_0_30px_rgba(52,211,153,0.2)]">
-                      {results.deltaG} <span className="text-xl text-slate-500">kcal/mol</span>
+                      {results.deltaG} <span className="text-xl text-slate-500 font-normal">kcal/mol</span>
                    </div>
                 </motion.div>
               )}
@@ -159,7 +145,7 @@ const MMGBSA: React.FC = () => {
         <div className="space-y-6">
            <div className="glass p-8 rounded-3xl space-y-6 border-l-4 border-l-cyan-500">
               <h4 className="text-lg font-bold text-white flex items-center gap-2">
-                 <Thermometer className="text-cyan-400" />
+                 <Thermometer className="text-cyan-400" size={18} />
                  Energy Components
               </h4>
               
@@ -179,7 +165,7 @@ const MMGBSA: React.FC = () => {
                          <motion.div 
                           className={`h-full ${comp.color}`}
                           initial={{ width: 0 }}
-                          animate={{ width: progress === 100 ? `${Math.abs((comp.val / (comp.max || 1)) * 100)}%` : 0 }}
+                          animate={{ width: progress === 100 ? `${Math.min(Math.abs((comp.val / (comp.max || 1)) * 100), 100)}%` : 0 }}
                           transition={{ delay: i * 0.1, duration: 1 }}
                          />
                       </div>
